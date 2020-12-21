@@ -1,0 +1,34 @@
+version: "3.9"
+services:
+  api:
+    container_name: sse-api
+    build: .
+    ports: 
+      - "4000:4000"
+    environment:
+      - ES_HOST=elasticsearch
+      - PORT=4000
+  
+  frontend:
+    container_name: sse-frontend
+    image: nginx
+    volumes:
+      - ./public:/usr/share/nginx/html
+    ports:
+      - "8080:80"
+  
+  elasticsearch:
+    container_name: sse-search
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.10.1
+    volumes:
+      - esdata:/usr/share/elasticsearch/data
+    environment:
+      - bootstrap.memoru_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - discovery.type=single-node
+    ports: 
+      - "9300:9300"
+      - "9200:9200"
+volumes:
+  esdata:
+    driver: local
