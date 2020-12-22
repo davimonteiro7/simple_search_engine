@@ -16,19 +16,19 @@ services:
       - ./public:/usr/share/nginx/html
     ports:
       - "8080:80"
-  
-  elasticsearch:
+  elasticsearch: # Elasticsearch Instance
     container_name: sse-search
     image: docker.elastic.co/elasticsearch/elasticsearch:7.10.1
-    volumes:
+    volumes: # Persist ES data in seperate "esdata" volume
       - esdata:/usr/share/elasticsearch/data
     environment:
-      - bootstrap.memoru_lock=true
+      - bootstrap.memory_lock=true
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
       - discovery.type=single-node
-    ports: 
+    ports: # Expose Elasticsearch ports
       - "9300:9300"
       - "9200:9200"
-volumes:
+
+volumes: # Define seperate volume for Elasticsearch data
   esdata:
     driver: local
