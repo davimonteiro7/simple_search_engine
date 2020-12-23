@@ -6,6 +6,7 @@ RUN mix deps.get && \
     mix distillery.init && \
     MIX_ENV=prod mix distillery.release
 
+RUN mix test
 RUN mkdir /export
 RUN tar -xf "./_build/prod/rel/simple_search_engine/releases/0.1.0/simple_search_engine.tar.gz" -C /export
 

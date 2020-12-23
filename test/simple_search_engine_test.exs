@@ -1,8 +1,8 @@
 defmodule SimpleSearchEngineTest do
   use ExUnit.Case
-  doctest SimpleSearchEngine
-
-  test "greets the world" do
-    assert SimpleSearchEngine.hello() == :world
-  end
+  alias Repositories.EntityRepository
+  
+  #test "Create a new index on Elasticsearch" do
+   # assert EntityRepository.create_index() == {:ok, _}
+  #end
 end

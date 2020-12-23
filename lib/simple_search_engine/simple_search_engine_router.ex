@@ -2,13 +2,17 @@ defmodule SimpleSearchEngine.Router do
   use Plug.Router
   use Plug.Debugger
   require Logger
+  
+  alias Repositories.EntityRepository
 
   plug(Plug.Logger, log: :debug)
   plug(:match)
   plug(:dispatch)
 
-  get "/" do
-   send_resp(conn, 200, "Backend Container - root router")
+  get "/" do  
+    IO.inspect EntityRepository.create_index()
+
+    send_resp(conn, 200, "Backend Container - root router")
   end
 
   match _ do
