@@ -9,9 +9,7 @@ defmodule SimpleSearchEngine.Router do
   plug(:match)
   plug(:dispatch)
 
-  get "/" do  
-    IO.inspect EntityRepository.create_index()
-
+  get "/" do    
     send_resp(conn, 200, "Backend Container - root router")
   end
 
