@@ -1,6 +1,6 @@
 defmodule Repositories.EntityRepository do
   require Logger
-  @elastic_url "http://localhost:9200"
+  @elastic_url "http://elasticsearch:9200"
 
   def create_index do
     {connection, check} = Elastix.Index.exists?(@elastic_url, "entities")

@@ -3,14 +3,22 @@ defmodule SimpleSearchEngine.Router do
   use Plug.Debugger
   require Logger
   
-  alias Repositories.EntityRepository
 
   plug(Plug.Logger, log: :debug)
   plug(:match)
   plug(:dispatch)
-
-  get "/" do    
+  
+  post "/search-engine/entities" do
+    {:ok, body, conn} = read_body(conn)
     
+    body = Poison.decode!(body)
+    
+    IO.inspect(body)
+    
+    send_resp(conn, 200, "Into the route.")
+  end
+
+  get "/" do     
     send_resp(conn, 200, "Backend Container - root router")
   end
 
