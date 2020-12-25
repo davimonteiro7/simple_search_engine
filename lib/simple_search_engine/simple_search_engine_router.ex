@@ -10,6 +10,7 @@ defmodule SimpleSearchEngine.Router do
   plug(:dispatch)
 
   get "/" do    
+    
     send_resp(conn, 200, "Backend Container - root router")
   end
 
