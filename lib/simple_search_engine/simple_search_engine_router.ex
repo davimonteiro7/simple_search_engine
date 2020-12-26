@@ -23,9 +23,9 @@ defmodule SimpleSearchEngine.Router do
     params = fetch_query_params(conn)
     parameter = params.query_params["q"]
 
-    response = EntityService.find_entity(parameter)
+    {_, results} = EntityService.find_entity(parameter)
     
-    IO.inspect(response)
+    IO.inspect(results)
     
     send_resp(conn, 200, "Backend Container - root router")
   end

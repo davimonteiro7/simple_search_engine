@@ -10,8 +10,7 @@ defmodule SimpleSearchEngine.MixProject do
       deps: deps()
     ]
   end
-
-  # Run "mix help compile.app" to learn about applications.
+  
   def application do
     [
       extra_applications: [:logger, :plug_cowboy, :poison],
@@ -19,7 +18,6 @@ defmodule SimpleSearchEngine.MixProject do
     ]
   end
 
-  # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
       {:distillery, "~> 2.1.1"},

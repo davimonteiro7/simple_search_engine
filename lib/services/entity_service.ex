@@ -9,10 +9,13 @@ defmodule Services.EntityService do
     EntityRepository.index_entity(entity_data) 
   end
 
-  def find_entity(parameter) do
-    {connection, response } = EntityRepository.search_entity(parameter)
-    results = response.body["hits"]["hits"]
-  end 
-  
-  defp check_index, do: EntityRepository.create_index()
+  def find_entity(parameter), 
+    do: EntityRepository.search_entity(parameter)
+    
+  defp check_index do
+    case EntityRepository.exist_index?() do
+      {:ok, true}  -> {:ok, :already_exists} 
+      {:ok, false} -> EntityRepository.create_index()
+    end
+  end
 end
