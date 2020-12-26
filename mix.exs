@@ -25,7 +25,8 @@ defmodule SimpleSearchEngine.MixProject do
       {:distillery, "~> 2.1.1"},
       {:plug_cowboy, "~> 2.4.1"},  
       {:poison, "~> 4.0.1"},
-      {:elastix, ">= 0.0.0"}, 
+      {:elastix, ">= 0.0.0"},
+      {:exsync, "~> 0.2", only: :dev}       
     ]
   end
 end

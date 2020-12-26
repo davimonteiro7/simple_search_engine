@@ -1,5 +1,7 @@
 FROM bitwalker/alpine-elixir:latest as build
 
+WORKDIR .
+
 COPY . .
 
 RUN mix deps.get && \

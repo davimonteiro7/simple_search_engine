@@ -2,7 +2,8 @@ defmodule SimpleSearchEngine.Router do
   use Plug.Router
   use Plug.Debugger
   require Logger
-  
+
+  alias Services.EntityService
 
   plug(Plug.Logger, log: :debug)
   plug(:match)
@@ -10,18 +11,25 @@ defmodule SimpleSearchEngine.Router do
   
   post "/search-engine/entities" do
     {:ok, body, conn} = read_body(conn)
+     
+    response = EntityService.create_entity(body)
     
-    body = Poison.decode!(body)
+    IO.inspect(response)
     
-    IO.inspect(body)
-    
-    send_resp(conn, 200, "Into the route.")
+    send_resp(conn, 201, "Post route")
   end
 
-  get "/" do     
+  get "/search-engine/entities" do     
+    params = fetch_query_params(conn)
+    parameter = params.query_params["q"]
+
+    response = EntityService.find_entity(parameter)
+    
+    IO.inspect(response)
+    
     send_resp(conn, 200, "Backend Container - root router")
   end
-
+     
   match _ do
     send_resp(conn, 404, "Page not found")
   end

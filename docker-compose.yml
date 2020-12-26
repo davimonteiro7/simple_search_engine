@@ -1,14 +1,18 @@
 version: "3.9"
 services:
-  api:
-    container_name: sse-api
-    build: .
-    ports: 
-      - "4000:4000"
-    environment:
-      - ES_HOST=elasticsearch
-      - PORT=4000
-  
+  #api:
+  #  container_name: sse-api
+  #  build: 
+  #    context: .
+  #    dockerfile: Dockerfile
+  #  volumes:
+  #    - ./:/vol
+  #  ports: 
+  #    - "4000:4000"
+  #  environment:
+  #    - ES_HOST=elasticsearch
+  #    - PORT=4000
+      
   frontend:
     container_name: sse-frontend
     image: nginx
@@ -31,4 +35,4 @@ services:
 
 volumes: # Define seperate volume for Elasticsearch data
   esdata:
-    driver: local
+    driver: local 
