@@ -3,65 +3,37 @@ defmodule SimpleSearchEngine.EntityRepositoryTest do
   alias Repositories.EntityRepository
   require Logger
 
-  @map_entity  %{
-    properties: %{
-      title: %{type: "text"},
-      type:  %{type: "keyword"},
-    },
-  }
-
-  @sample_doc  %{
-      title: "Some title",
-      type: "TOPIC",
-  }
-
-  @query_test  %{
-    query: %{ 
-      match: %{ 
-        title: %{ 
-          query: "titl", 
-          operator: "and", 
-          fuzziness: "auto"} 
-      }
-    }     
-  }
-    
   test "Create a new index on Elasticsearch" do
-    {connection, response} = EntityRepository.create_index()
-
-    assert connection === :ok
-    assert response === :already_exists or response === 201
-  end
-
-  test "Mapping a type to the index." do
-    {connection, response} =  EntityRepository.mapping(@map_entity)
+     {db_conn, _} = EntityRepository.create_index()
+     assert db_conn == :ok
+  end 
+  
+  test "Check for an existent index" do
+    existent = "entities"
+    unexistent = "another"
     
-    assert connection === :ok
-    assert response.status_code  ===  200
+    {db_conn1, exist}   = EntityRepository.exist_index?(existent)
+    {db_conn2, unexist} = EntityRepository.exist_index?(unexistent)
+    
+    assert {db_conn1, exist}  === {:ok, true}
+    assert {db_conn2, unexist} === {:ok, false}
+
   end 
   
   test "Insert a new documemt to the index." do
-    {connection, response} = EntityRepository.index_entity(@sample_doc)
-       
-    assert connection === :ok
-    assert response.status_code === 201
+    response = EntityRepository.index_entity(%{ title: "Some title", type: "TOPIC"})
+    assert response === {:ok, 201}
   end
 
   test "Search a document into an index." do
-    {connection, response} = EntityRepository.search_entity(@query_test)
-
-    assert connection  === :ok
-    assert response.status_code === 200 
-  end
-  
-  test "Remove an existent document into an index" do
-    {_, resp} = EntityRepository.search_entity(@query_test)
-    existent_id = resp.body["hits"]["hits"] |> Enum.at(0) 
-    existent_id = existent_id["_id"]
+    founded = "som"
+    not_found = "sdfsdafdsaf"
     
-    {connection, response} = EntityRepository.remove_entity_by_id(existent_id) 
-    
-    assert {connection, response.status_code} === {:ok, 200} 
-  end
+    {db_conn1, empty_result}  = EntityRepository.search_entity(not_found)
+    {db_conn2, filled_result} = EntityRepository.search_entity(founded)
 
-end
+    assert {db_conn1, empty_result}  === {:ok, []}
+    assert {db_conn2, filled_result} === {:ok, filled_result} 
+  end
+end    
+

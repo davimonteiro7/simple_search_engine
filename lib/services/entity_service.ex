@@ -3,10 +3,11 @@ defmodule Services.EntityService do
   require Logger
 
   def create_entity(body_data) do
-    Logger.info "Decoding an entity..."
+    Logger.info "Decoding an JSON entity..."
     entity_data = Poison.decode!(body_data)
     check_index()
-
+    
+    Logger.info "Indexing a new entity..."
     EntityRepository.index_entity(entity_data) 
       |> format_results()   
   end
@@ -22,7 +23,6 @@ defmodule Services.EntityService do
       {:ok, false} -> EntityRepository.create_index()
     end
   end
-  
   
   defp format_results({:ok, 201}),
     do: {:ok, :created, "Successffuy created.\n"}

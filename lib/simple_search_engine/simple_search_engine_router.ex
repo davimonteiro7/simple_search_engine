@@ -13,7 +13,8 @@ defmodule SimpleSearchEngine.Router do
     {:ok, body, conn} = read_body(conn)
      
     {status_code, message} = EntityService.create_entity(body) |> handle_response()
-     send_resp(conn, status_code, message)
+    
+    send_resp(conn, status_code, message)
   end
 
   get "/search-engine/entities" do     
@@ -37,5 +38,4 @@ defmodule SimpleSearchEngine.Router do
       {:error, :server, message}  ->  {500, message}
     end
   end
-
 end
