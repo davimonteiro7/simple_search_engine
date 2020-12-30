@@ -1,7 +1,6 @@
 defmodule SimpleSearchEngine.EntityRepositoryTest do
   use ExUnit.Case
   alias Repositories.EntityRepository
-  require Logger
 
   test "Create a new index on Elasticsearch" do
      {db_conn, _} = EntityRepository.create_index()

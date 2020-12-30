@@ -32,10 +32,10 @@ defmodule SimpleSearchEngine.Router do
 
   defp handle_response(response) do
     case response do  
-      {:ok, results}              ->  {200, results}
-      {:ok, :created, message}    ->  {201, message}
-      {:error, :client, message}  ->  {404, message}
-      {:error, :server, message}  ->  {500, message}
+      {:ok, :founded, results}          ->  {200, results}
+      {:ok, :created, message}          ->  {201, message}
+      {:error, :not_founded, message}   ->  {404, message}
+      {:error, :server_error, message}  ->  {500, message}
     end
   end
 end
