@@ -3,36 +3,31 @@ defmodule SimpleSearchEngine.EntityRepositoryTest do
   alias Repositories.EntityRepository
 
   test "Create a new index on Elasticsearch" do
-     {db_conn, _} = EntityRepository.create_index()
-     assert db_conn == :ok
+     
+    assert {:ok, _} =  EntityRepository.create_index()
   end 
   
   test "Check for an existent index" do
     existent = "entities"
-    unexistent = "another"
+    unexistent = "another_index"
     
-    {db_conn1, exist}   = EntityRepository.exist_index?(existent)
-    {db_conn2, unexist} = EntityRepository.exist_index?(unexistent)
-    
-    assert {db_conn1, exist}  === {:ok, true}
-    assert {db_conn2, unexist} === {:ok, false}
-
+    assert {:ok, true } = EntityRepository.exist_index?(existent)
+    assert {:ok, false} = EntityRepository.exist_index?(unexistent)
   end 
   
   test "Insert a new documemt to the index." do
-    response = EntityRepository.index_entity(%{ title: "Some title", type: "TOPIC"})
-    assert response === {:ok, 201}
+    assert {:ok, 201} = EntityRepository.index_entity(%{ title: "Some title", type: "TOPIC"})
   end
 
   test "Search a document into an index." do
-    founded = "som"
-    not_found = "sdfsdafdsaf"
     
-    {db_conn1, empty_result}  = EntityRepository.search_entity(not_found)
-    {db_conn2, filled_result} = EntityRepository.search_entity(founded)
-
-    assert {db_conn1, empty_result}  === {:ok, []}
-    assert {db_conn2, filled_result} === {:ok, filled_result} 
+    founded   = %{"q" => "som"}               #matching a document inserted on the last test.
+    not_found = %{"q" => "unexistent_entity"}
+     
+    {:ok, results} = EntityRepository.search_entity(founded)
+    
+    assert {:ok, []} = EntityRepository.search_entity(not_found)
+    assert  !Enum.empty?(results) 
   end
 end    
 

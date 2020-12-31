@@ -4,16 +4,13 @@ defmodule SimpleSearchEngine.EntityServiceTest do
 
   test "Create a new entity." do
     body_data = '{"title": "Some title", "type": "TOPIC"}'
-    {db_conn, status, message} = EntityService.create_entity(body_data)
-    
-    assert {:ok, :created, message} === {db_conn, status, message}
+    assert {:ok, :created, _} = EntityService.create_entity(body_data)
   end
 
   test "Finding an existent entity" do
-    parameter = "som"
-    {db_conn, status, result} = EntityService.find_entity(parameter)
-
-    assert {:ok, :founded, result} === {db_conn, status, result} or
-    {:ok, :not_founded, result}    === {db_conn, status, result} 
+    parameter = %{"q" => "som"}
+    invalid_param = %{"q" => "fsda78f79sdf907afdsfsdaf"}
+    assert {:ok, :founded, _} = EntityService.find_entity(parameter) 
+    assert {:error, :not_founded, _} = EntityService.find_entity(invalid_param)
   end
 end

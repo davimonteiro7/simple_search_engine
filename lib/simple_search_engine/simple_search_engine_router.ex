@@ -9,6 +9,8 @@ defmodule SimpleSearchEngine.Router do
   plug(:match)
   plug(:dispatch)
   
+  plug Plug.Parsers, parsers: [:urlencoded, :multipart]
+
   post "/search-engine/entities" do
     {:ok, body, conn} = read_body(conn)
      
@@ -18,10 +20,12 @@ defmodule SimpleSearchEngine.Router do
   end
 
   get "/search-engine/entities" do     
-    params = fetch_query_params(conn)
-    parameter = params.query_params["q"]
-
-    {status_code, response} = EntityService.find_entity(parameter) |> handle_response()
+        
+    parameter = fetch_query_params(conn).params["q"]
+    
+    params = fetch_query_params(conn).params
+        
+    {status_code, response} = EntityService.find_entity(params) |> handle_response()
 
     send_resp(conn, status_code, response)
   end

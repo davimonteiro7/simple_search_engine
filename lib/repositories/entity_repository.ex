@@ -26,21 +26,39 @@ defmodule Repositories.EntityRepository do
     end
   end
 
-  def search_entity(query) do
+  def search_entity(params) do
     Logger.info "Searching an entity at elastic instance..."
-    response = Elastix.Search.search(@elastic_url, @index, [@type_], handle_query(query))
+    response = Elastix.Search.search(@elastic_url, @index, [@type_], handle_query(params))
     case response do
       {:ok, _}    ->  handle_search_result(response)
       {:error, _} ->  throw_error_message()   
     end
   end
-
-  defp handle_query(query) do
+  
+  
+  defp handle_query(%{"entity_type" => type, "q" => query}) do
+    %{
+      size: 100,
+      query: %{
+        bool: %{
+          must: %{
+            match: %{
+              title:  %{ query: query, operator: "and", fuzziness: "auto"},   
+            }
+          },
+          filter: %{
+            term: %{ type: type }
+          }
+        }  
+      }
+    }
+  end
+  defp handle_query(%{"q" => query}) do
     %{
       size: 100,
       query: %{
         match: %{
-          title: %{ query: query, operator: "and", fuzziness: "auto"}
+          title:  %{ query: query, operator: "and", fuzziness: "auto"},
         }
       }
     }

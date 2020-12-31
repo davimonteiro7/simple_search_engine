@@ -10,8 +10,8 @@ defmodule Services.EntityService do
       |> format_results()   
   end
 
-  def find_entity(parameter) do 
-    EntityRepository.search_entity(parameter)
+  def find_entity(params) do 
+    EntityRepository.search_entity(params)
       |> format_results()
   end
 
@@ -34,7 +34,7 @@ defmodule Services.EntityService do
     do: {:ok, :created, "Successffuy created.\n"}
   
   defp format_results({:ok, []}),  
-    do: {:ok, :not_founded, "Not found an entity with these parameters."}
+    do: {:error, :not_founded, "Not found an entity with these parameters."}
        
   defp format_results({:ok, results}) do 
     results = results 
